@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,9 +13,7 @@ class ShowSnackBar extends BlocCommand {
   ShowSnackBar(this.message);
 }
 
-
 abstract class ExtendedBloc<Event, State> extends Bloc<Event, State> {
-
   ExtendedBloc(State initialState) : super(initialState);
 
   final _commandsController = StreamController<BlocCommand>.broadcast();
@@ -38,18 +35,15 @@ class BlocCommandsListener<B extends ExtendedBloc> extends StatefulWidget {
   final Function(BuildContext context, BlocCommand command) listener;
   final Widget child;
 
-  BlocCommandsListener({
-    @required this.listener,
-    this.child,
-  });
+  BlocCommandsListener({required this.listener, required this.child});
 
   @override
   _BlocCommandsListenerState<B> createState() => _BlocCommandsListenerState<B>();
 }
 
 class _BlocCommandsListenerState<B extends ExtendedBloc> extends State<BlocCommandsListener> {
-  B _bloc;
-  StreamSubscription<BlocCommand> _subscription;
+  late B _bloc;
+  late StreamSubscription<BlocCommand> _subscription;
 
   @override
   void initState() {
@@ -70,19 +64,12 @@ class _BlocCommandsListenerState<B extends ExtendedBloc> extends State<BlocComma
   }
 
   void _subscribe() {
-    if (_bloc != null) {
-      _bloc.commandsStream.listen(
-        (command) {
-          widget.listener(context, command);
-        },
-      );
-    }
+    _bloc.commandsStream.listen((command) {
+      widget.listener(context, command);
+    });
   }
 
   void _unsubscribe() {
-    if (_subscription != null) {
-      _subscription.cancel();
-      _subscription = null;
-    }
+    _subscription.cancel();
   }
 }

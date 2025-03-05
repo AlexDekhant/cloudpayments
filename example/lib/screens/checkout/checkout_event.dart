@@ -13,7 +13,12 @@ class PayButtonPressed extends CheckoutEvent {
   final String expiryDate;
   final String cvcCode;
 
-  PayButtonPressed({this.cardHolder, this.cardNumber, this.expiryDate, this.cvcCode});
+  PayButtonPressed({
+    required this.cardHolder,
+    required this.cardNumber,
+    required this.expiryDate,
+    required this.cvcCode,
+  });
 }
 
 class Init extends CheckoutEvent {}
@@ -47,10 +52,6 @@ class Post3DS extends CheckoutEvent {
   Post3DS(this.md, this.paRes);
 }
 
-class GooglePayPressed extends CheckoutEvent {
+class GooglePayPressed extends CheckoutEvent {}
 
-}
-
-class ApplePayPressed extends CheckoutEvent {
-
-}
+class ApplePayPressed extends CheckoutEvent {}

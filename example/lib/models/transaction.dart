@@ -6,11 +6,11 @@ class Transaction {
   final String acsUrl;
 
   Transaction.fromJson(Map<String, dynamic> json)
-      : transactionId = json['TransactionId'].toString(),
-        reasonCode = json['ReasonCode'],
-        cardHolderMessage = json['CardHolderMessage'],
-        paReq = json['PaReq'],
-        acsUrl = json['AcsUrl'];
+    : transactionId = json['TransactionId'].toString(),
+      reasonCode = json['ReasonCode'],
+      cardHolderMessage = json['CardHolderMessage'],
+      paReq = json['PaReq'],
+      acsUrl = json['AcsUrl'];
 
   @override
   String toString() {

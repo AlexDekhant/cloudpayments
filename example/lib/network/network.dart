@@ -13,9 +13,9 @@ class Network {
   _initDio(String url) {
     _dio.options
       ..baseUrl = url
-      ..connectTimeout = Duration(seconds: 30).inMilliseconds
-      ..receiveTimeout = Duration(seconds: 30).inMilliseconds
-      ..sendTimeout = Duration(seconds: 30).inMilliseconds;
+      ..connectTimeout = Duration(seconds: 30)
+      ..receiveTimeout = Duration(seconds: 30)
+      ..sendTimeout = Duration(seconds: 30);
 
     _dio.interceptors.add(
       dio.LogInterceptor(
@@ -29,30 +29,17 @@ class Network {
     );
   }
 
-  Future<Response> get(
-      String url, {
-        Map<String, dynamic> query,
-        Map<String, String> headers,
-      }) async {
-    return _dio.get(
-      url,
-      queryParameters: query,
-      options: dio.Options(headers: headers),
-    ).then(_toResponse);
+  Future<Response> get(String url, {required Map<String, dynamic> query, required Map<String, String> headers}) async {
+    return _dio.get(url, queryParameters: query, options: dio.Options(headers: headers)).then(_toResponse);
   }
 
   Future<Response> post(
-      String url, {
-        Map<String, dynamic> query,
-        Map<String, dynamic> body,
-        Map<String, String> headers,
-      }) async {
-    return _dio.post(
-      url,
-      queryParameters: query,
-      data: body,
-      options: dio.Options(headers: headers),
-    ).then(_toResponse);
+    String url, {
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? body,
+    Map<String, String>? headers,
+  }) async {
+    return _dio.post(url, queryParameters: query, data: body, options: dio.Options(headers: headers)).then(_toResponse);
   }
 
   Response _toResponse(dio.Response r) {

@@ -55,33 +55,25 @@ class _CheckoutScreenContentState extends State<CheckoutScreenContent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Checkout'),
-      ),
+      appBar: AppBar(title: const Text('Checkout')),
       body: BlocCommandsListener<CheckoutBloc>(
         listener: (context, command) {
           if (command is ShowSnackBar) {
-            final snackBar = SnackBar(
-              content: Text(command.message),
-            );
-            Scaffold.of(context).showSnackBar(snackBar);
+            final snackBar = SnackBar(content: Text(command.message));
           }
         },
         child: BlocBuilder<CheckoutBloc, CheckoutState>(
           builder: (context, state) {
             print('Rebuild screen');
             return LoadingOverlay(
-              isLoading: state.isLoading,
+              isLoading: state.isLoading ?? false,
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Total to be paid: 2 RUB.',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                      Text('Total to be paid: 2 RUB.', style: TextStyle(fontWeight: FontWeight.bold)),
                       TextField(
                         controller: cardHolderController,
                         keyboardType: TextInputType.name,
@@ -94,9 +86,7 @@ class _CheckoutScreenContentState extends State<CheckoutScreenContent> {
                           errorText: state.cardHolderError,
                         ),
                       ),
-                      SizedBox(
-                        height: 16,
-                      ),
+                      SizedBox(height: 16),
                       TextField(
                         keyboardType: TextInputType.number,
                         inputFormatters: [cardNumberMaskFormatter],
@@ -108,9 +98,7 @@ class _CheckoutScreenContentState extends State<CheckoutScreenContent> {
                           errorText: state.cardNumberError,
                         ),
                       ),
-                      SizedBox(
-                        height: 16,
-                      ),
+                      SizedBox(height: 16),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -127,9 +115,7 @@ class _CheckoutScreenContentState extends State<CheckoutScreenContent> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            width: 16,
-                          ),
+                          SizedBox(width: 16),
                           Expanded(
                             child: TextField(
                               textInputAction: TextInputAction.done,
@@ -145,29 +131,21 @@ class _CheckoutScreenContentState extends State<CheckoutScreenContent> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 16,
-                      ),
+                      SizedBox(height: 16),
                       CustomButton(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              'Pay with card',
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(
-                              width: 16,
-                            ),
+                            Text('Pay with card', textAlign: TextAlign.center),
+                            SizedBox(width: 16),
                             Icon(Icons.credit_card),
                           ],
                         ),
                         onPressed: () => _onPayClick(context),
+                        backgroundColor: Colors.white,
                       ),
-                      if (state.isGooglePayAvailable)
-                        GooglePaySection(),
-                      if (state.isApplePayAvailable)
-                        ApplePaySection(),
+                      if (state.isGooglePayAvailable ?? false) GooglePaySection(),
+                      if (state.isApplePayAvailable ?? false) ApplePaySection(),
                     ],
                   ),
                 ),
@@ -192,14 +170,8 @@ class GooglePaySection extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Pay with',
-              textAlign: TextAlign.center,
-            ),
-            SvgPicture.asset(
-              'assets/images/google_pay.svg',
-              height: 30,
-            ),
+            Text('Pay with', textAlign: TextAlign.center),
+            SvgPicture.asset('assets/images/google_pay.svg', height: 30),
           ],
         ),
       ),
@@ -218,12 +190,7 @@ class ApplePaySection extends StatelessWidget {
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Pay with Apple',
-              textAlign: TextAlign.center,
-            ),
-          ],
+          children: [Text('Pay with Apple', textAlign: TextAlign.center)],
         ),
       ),
     );
@@ -239,17 +206,10 @@ class PaySection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-          height: 16,
-        ),
-        Align(
-          alignment: Alignment.center,
-          child: Text('or'),
-        ),
-        SizedBox(
-          height: 16,
-        ),
-        payButton
+        SizedBox(height: 16),
+        Align(alignment: Alignment.center, child: Text('or')),
+        SizedBox(height: 16),
+        payButton,
       ],
     );
   }

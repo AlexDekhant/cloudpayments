@@ -68,7 +68,7 @@ class CheckoutBloc extends ExtendedBloc<CheckoutEvent, CheckoutState> {
       return;
     }
 
-    yield state.copyWith(cardHolderError: null, cardNumberError: null, expiryDateError: null, cvcError: null);
+    yield state.copyWith();
 
     final cryptogram = await Cloudpayments.cardCryptogram(
       cardNumber: event.cardNumber,
@@ -78,7 +78,7 @@ class CheckoutBloc extends ExtendedBloc<CheckoutEvent, CheckoutState> {
     );
 
     if (cryptogram.cryptogram != null) {
-      add(Auth(cryptogram.cryptogram, event.cardHolder, '1'));
+      add(Auth(cryptogram.cryptogram ?? '', event.cardHolder, '1'));
     }
   }
 
@@ -98,13 +98,12 @@ class CheckoutBloc extends ExtendedBloc<CheckoutEvent, CheckoutState> {
 
       if (result.isSuccess) {
         final token = result.token;
-        add(Charge(token, 'Google Pay', '2.34'));
+        add(Charge(token ?? '', 'Google Pay', '2.34'));
       } else if (result.isError) {
-        sendCommand(ShowSnackBar(result.errorDescription));
+        sendCommand(ShowSnackBar(result.errorDescription ?? ''));
       } else if (result.isCanceled) {
         sendCommand(ShowSnackBar('Google pay has canceled'));
       }
-
     } catch (e) {
       yield state.copyWith(isLoading: false);
       sendCommand(ShowSnackBar("Error"));
@@ -120,19 +119,18 @@ class CheckoutBloc extends ExtendedBloc<CheckoutEvent, CheckoutState> {
         currencyCode: 'RUB',
         countryCode: 'RU',
         products: [
-          {"name": "Манго", "price": "650.50"}
+          {"name": "Манго", "price": "650.50"},
         ],
       );
 
       if (result.isSuccess) {
         final token = result.token;
-        add(Auth(token, '', '650.50'));
+        add(Auth(token ?? '', '', '650.50'));
       } else if (result.isError) {
-        sendCommand(ShowSnackBar(result.errorMessage));
+        sendCommand(ShowSnackBar(result.errorMessage ?? ''));
       } else if (result.isCanceled) {
         sendCommand(ShowSnackBar('Apple pay has canceled'));
       }
-
     } catch (e) {
       print('Error $e');
       yield state.copyWith(isLoading: false);
@@ -179,10 +177,10 @@ class CheckoutBloc extends ExtendedBloc<CheckoutEvent, CheckoutState> {
     );
 
     if (result != null) {
-      if (result.success) {
-        add(Post3DS(result.md, result.paRes));
+      if (result.success ?? false) {
+        add(Post3DS(result.md ?? '', result.paRes ?? ''));
       } else {
-        sendCommand(ShowSnackBar(result.error));
+        sendCommand(ShowSnackBar(result.error ?? ''));
       }
     }
   }
